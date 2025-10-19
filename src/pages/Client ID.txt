@@ -1,0 +1,9 @@
+Client ID
+Ov23lij9JODEvmmgqqHf
+
+Client secret
+c9e7e0073de9c8e9e2375b0d7ec5a39bcaf999e2 Copied!
+Added now by ashrull27
+Never used
+
+You cannot delete the only client secret. Generate a new client secret first

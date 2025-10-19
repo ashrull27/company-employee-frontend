@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/company-employee-frontend/static/css/main.685e8180.css",
+    "main.js": "/company-employee-frontend/static/js/main.8739e6c9.js",
+    "index.html": "/company-employee-frontend/index.html",
+    "main.685e8180.css.map": "/company-employee-frontend/static/css/main.685e8180.css.map",
+    "main.8739e6c9.js.map": "/company-employee-frontend/static/js/main.8739e6c9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.685e8180.css",
+    "static/js/main.8739e6c9.js"
+  ]
+}
