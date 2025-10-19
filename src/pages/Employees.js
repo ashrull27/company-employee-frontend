@@ -177,7 +177,7 @@ const Employees = () => {
           ) : (
             employees.map((employee) => (
               <tr key={employee.id}>
-                <td>{employee.id}</td>
+                <td>{(pagination.page - 1) * pagination.limit + employees.indexOf(employee) + 1}</td>
                 <td>{employee.first_name}</td>
                 <td>{employee.last_name}</td>
                 <td>{employee.company_name || 'N/A'}</td>

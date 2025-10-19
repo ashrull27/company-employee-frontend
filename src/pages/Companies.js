@@ -134,7 +134,7 @@ const Companies = () => {
           ) : (
             companies.map((company) => (
               <tr key={company.id}>
-                <td>{company.id}</td>
+                <td>{(pagination.page - 1) * pagination.limit + companies.indexOf(company) + 1}</td>
                 <td>{company.name}</td>
                 <td>{company.email || 'N/A'}</td>
                 <td>{company.website || 'N/A'}</td>
