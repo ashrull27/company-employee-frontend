@@ -13,7 +13,7 @@ const Companies = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
 
   // Wrap fetchCompanies in useCallback to memoize it
-  const fetchCompanies = useCallback(async (pageNum = pagination.page) => {
+  const fetchCompanies = useCallback(async (pageNum) => {
     try {
       setLoading(true);
       const response = await companyService.getAll(pageNum, pagination.limit);

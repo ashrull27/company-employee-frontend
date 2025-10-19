@@ -21,7 +21,7 @@ const Employees = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
 
   // Wrap fetchEmployees in useCallback to memoize it
-  const fetchEmployees = useCallback(async (pageNum = pagination.page) => {
+  const fetchEmployees = useCallback(async (pageNum) => {
     try {
       setLoading(true);
       const response = await employeeService.getAll(pageNum, pagination.limit);
