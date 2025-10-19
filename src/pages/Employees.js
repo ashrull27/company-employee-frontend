@@ -21,12 +21,12 @@ const Employees = () => {
   const [pagination, setPagination] = useState({ page: 1, limit: 10, total: 0, totalPages: 0 });
 
   // Wrap fetchEmployees in useCallback to memoize it
-  const fetchEmployees = useCallback(async () => {
+  const fetchEmployees = useCallback(async (pageNum = pagination.page) => {
     try {
       setLoading(true);
-      const response = await employeeService.getAll(pagination.page, pagination.limit);
+      const response = await employeeService.getAll(pageNum, pagination.limit);
       setEmployees(response.data.data);
-      setPagination(prev => ({ ...prev, ...response.data.pagination }));
+      setPagination(prev => ({ ...prev, page: pageNum, ...response.data.pagination }));
       setError('');
     } catch (err) {
       setError('Failed to fetch employees');
@@ -34,7 +34,7 @@ const Employees = () => {
     } finally {
       setLoading(false);
     }
-  }, [pagination.page, pagination.limit]);
+  }, [pagination.limit]);
 
   // Wrap fetchCompanies in useCallback to memoize it
   const fetchCompanies = useCallback(async () => {
@@ -46,10 +46,10 @@ const Employees = () => {
     }
   }, []);
 
-  // Load employees and companies on component mount and pagination change
+  // Load employees on page change
   useEffect(() => {
-    fetchEmployees();
-  }, [fetchEmployees]);
+    fetchEmployees(pagination.page);
+  }, [fetchEmployees, pagination.page]);
 
   // Load companies on component mount
   useEffect(() => {
@@ -99,7 +99,8 @@ const Employees = () => {
       } else {
         await employeeService.create(formData);
       }
-      fetchEmployees();
+      // Reset to page 1 after create/update to see changes
+      setPagination(prev => ({ ...prev, page: 1 }));
       handleCloseModal();
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save employee');
@@ -111,7 +112,20 @@ const Employees = () => {
     if (window.confirm('Are you sure you want to delete this employee?')) {
       try {
         await employeeService.delete(id);
-        fetchEmployees();
+        
+        // After deletion, check if we need to adjust the page
+        const newTotal = pagination.total - 1;
+        const newTotalPages = Math.ceil(newTotal / pagination.limit);
+        
+        // If current page is now empty, go to previous page
+        if (pagination.page > newTotalPages && newTotalPages > 0) {
+          setPagination(prev => ({ ...prev, page: newTotalPages, total: newTotal, totalPages: newTotalPages }));
+        } else {
+          setPagination(prev => ({ ...prev, total: newTotal, totalPages: newTotalPages }));
+        }
+        
+        // Refresh the current page data
+        fetchEmployees(Math.min(pagination.page, newTotalPages));
       } catch (err) {
         setError('Failed to delete employee');
         console.error(err);
